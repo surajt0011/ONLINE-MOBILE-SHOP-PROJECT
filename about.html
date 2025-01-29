@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Mobile Shop</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+    <link rel="stylesheet" href="style/style.css">
+    <style>
+        /* CSS for the rainbow marquee effect */
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+            position: relative;
+            height: 40px; /* Set the height for the marquee */
+        }
+
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%; /* Start from the right */
+            font-size: 24px; /* Adjust the font size */
+            animation: move 8s linear infinite, rainbow 1s linear infinite; /* Faster movement: 2 seconds duration */
+        }
+
+        @keyframes move {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        @keyframes rainbow {
+            0% { color: red; }
+            14% { color: orange; }
+            28% { color: yellow; }
+            42% { color: green; }
+            57% { color: blue; }
+            71% { color: indigo; }
+            85% { color: violet; }
+            100% { color: red; } /* Loop back to red */
+        }
+    </style>
+</head>
+<body>
+    <section id="header">
+        <a href="#"><img src="img/logo.png" class="logo" alt="logopng"></a>
+
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a class="active" href="about.html">About</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="page-header" class="about-header">
+        <h2>#KnowUs</h2>
+        <p>Know About Royal Mobile Shop</p>
+    </section>
+
+    <section id="about-head" class="section-p1">
+        <img src="img/logo.png" alt="">
+        <div>
+            <h2>Royal Mobile Shop</h2>
+            <p>At Royal Mobile Shopee, we believe that the right mobile phone can transform your life. We offer a wide selection of the latest smartphones, tablets, and accessories from leading global brands like Apple, Samsung, Xiaomi, OnePlus, and more. Whether you’re upgrading, switching, or just browsing, our curated collection has something for everyone.</p>
+        
+            <br><br>
+            <div class="marquee" id="marquee">
+                <span id="marquee-text"><b><i>One of the Best Mobile Shop in Pune</i></b></span>
+            </div>
+        </div>
+    </section>
+
+    <section id="feature" class="section-p1">
+        <div class="fe-box">
+            <img src="img/features/f1.png" alt="">
+            <h6>Free Shipping</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f2.png" alt="">
+            <h6>Online Order</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f5.png" alt="">
+            <h6>7DaysReplacement</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f3.png" alt="">
+            <h6>Pay on Delivery</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f4.png" alt="">
+            <h6>1 Year Warranty</h6>
+        </div>
+        <div class="fe-box">
+            <img src="img/features/f6.png" alt="">
+            <h6>24/7 Support</h6>
+        </div>
+    </section>
+    
+    <section id="newsletters" class="section-p1 section-m1">
+        <div class="newstext">
+            <h4>Sign Up For newsletters</h4>
+            <p>Get E-mail updates about our latest shop and <span>Special Offers</span></p>
+        </div>
+        <div class="form">
+            <input type="text" placeholder="Your Email Address">
+            <button class="normal">Sign Up</button>
+        </div>
+    </section>
+    
+    <footer class="section-p1">
+        <div class="col">
+            <img src="img/logo.png" class="logo" alt="logo png">
+            <h4>Contact</h4>
+            <p><strong>Address:</strong> 562 FC Road, Pune </p>
+            <p><strong>Phone:</strong> +91 0123456789</p>
+            <p><strong>Hours:</strong> 10:00 AM - 09:00 PM Mon-Sat</p>
+            <div class="follow">
+                <h4>Follow Us</h4>
+                <div class="icon">
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact Us</a>
+        </div>
+
+        <div class="col">
+            <h4>My Account</h4>
+            <a href="#">Sign Up</a>
+            <a href="#">Sign In</a>
+            <a href="cart.html">View Cart</a>
+</div>
+
+        <div class="col install">
+            <h4>Visit The Official Website</h4>
+            <div class="row">
+                <img src="" alt="Site img">
+            </div>
+            <p>Secured Payment GateWays </p>
+            <img src="img/paybanner/pay.png" alt="payment img">
+        </div>
+
+        <div class="copyright">
+            <p></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        const messages = [
+            "One of the Best Mobile Shop in Pune",
+            "Your Trusted Smartphone Retailer",
+            "Discover the Latest Tech Innovations",
+            "Quality Products at Competitive Prices",
+            "Excellent Customer Service Awaits You"
+        ];
+
+        let index = 0;
+
+        function changeMarqueeText() {
+            const marqueeText = document.getElementById("marquee-text");
+            marqueeText.innerHTML = `<b><i>${messages[index]}</i></b>`;
+            index = (index + 1) % messages.length; // Loop through messages
+        }
+
+        setInterval(changeMarqueeText, 2000); // Change text every 2 seconds
+    </script>
+</body>
+</html>

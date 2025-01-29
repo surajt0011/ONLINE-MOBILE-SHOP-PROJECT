@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Mobile Shop - Cart</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <section id="header">
+        <a href="#"><img src="img/logo.png" class="logo" alt="logopng"></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a class="active" href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Page Header -->
+    <section id="page-header" class="about-header">
+        <h2>#My_Cart</h2>
+        <p>Buy More Products..!</p>
+    </section>   
+
+    <!-- Cart Section -->
+    <section id="cart" class="section-p1">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td>REMOVE</td>
+                    <td>IMAGE</td>
+                    <td>PRODUCT</td>
+                    <td>PRICE</td>
+                    <td>QUANTITY</td>
+                    <td>SUBTOTAL</td>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                <!-- Cart items will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Cart Additions (Coupon and Subtotal) -->
+    <section id="cart-add" class="section-p1">
+        <div id="coupon">
+            <h3>Apply Coupon</h3>
+            <div>
+                <input type="text" placeholder="Enter Your Coupon Code">
+                <button class="normal">Apply</button>
+            </div>
+        </div>
+
+        <div id="subtotal">
+            <h3>Cart Totals</h3>
+            <table>
+                <tr>
+                    <td>Cart Subtotal</td>
+                    <td id="cart-subtotal">RS.0</td>
+                </tr>
+                <tr>
+                    <td>Shipping</td>
+                    <td>Free</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><strong id="cart-total">RS.0</strong></td>
+                </tr>
+            </table>
+            <button class="normal" onclick="window.location.href='checkout.html';">Proceed to Checkout</button>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="section-p1">
+        <!-- Footer content here -->
+        <!-- Include contact details, social media, account links, etc. -->
+    </footer>
+    <script>
+       // Function to load cart from localStorage
+function loadCart() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItemsContainer = document.getElementById('cart-items');
+    let cartHTML = '';
+    let subtotal = 0;
+
+    // Check if cart is empty
+    if (cart.length === 0) {
+        cartHTML = '<tr><td colspan="6">Your cart is empty</td></tr>';
+    } else {
+        // Generate HTML for each cart item
+        cart.forEach(item => {
+            const itemSubtotal = item.price * item.quantity;
+            subtotal += itemSubtotal;
+
+            cartHTML += `
+                <tr>
+                    <td><a href="#" class="remove-item" data-id="${item.id}"><i class="far fa-times-circle"></i></a></td>
+                    <td><img src="${item.image}" alt="${item.name}"></td>
+                    <td>${item.name}</td>
+                    <td>RS. ${item.price}</td>
+                    <td><input type="number" value="${item.quantity}" data-id="${item.id}" class="cart-quantity" min="1"></td>
+                    <td>RS. ${itemSubtotal}</td>
+                </tr>
+            `;
+        });
+    }
+
+    // Display the cart items
+    cartItemsContainer.innerHTML = cartHTML;
+
+    // Update subtotal and total
+    document.getElementById('cart-subtotal').textContent = `RS. ${subtotal}`;
+    document.getElementById('cart-total').textContent = `RS. ${subtotal}`;
+
+    // Add event listeners to quantity and remove buttons
+    document.querySelectorAll('.cart-quantity').forEach(input => {
+        input.addEventListener('change', updateQuantity);
+    });
+    document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', removeItem);
+    });
+}
+
+// Function to update quantity of a product in the cart
+function updateQuantity(event) {
+    const productId = event.target.getAttribute('data-id');
+    const newQuantity = parseInt(event.target.value);
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const product = cart.find(item => item.id === productId);
+
+    if (product && newQuantity > 0) {
+        product.quantity = newQuantity;
+        localStorage.setItem('cart', JSON.stringify(cart));
+    } else if (product && newQuantity <= 0) {
+        removeItem({ target: { getAttribute: () => productId } }); // Remove if quantity is 0 or less
+    }
+
+    loadCart(); // Reload cart to reflect changes
+}
+
+// Function to remove a product from the cart
+function removeItem(event) {
+    const productId = event.target.closest('a').getAttribute('data-id');
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart = cart.filter(item => item.id !== productId);
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    loadCart(); // Reload cart to reflect changes
+}
+
+// Function to apply coupon
+function applyCoupon() {
+    const couponCode = document.querySelector('#coupon input').value.trim();
+    const validCoupons = { "DISCOUNT10": 0.1, "DISCOUNT20": 0.2 }; // Example of valid coupons
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let subtotal = 0;
+
+    cart.forEach(item => {
+        subtotal += item.price * item.quantity;
+    });
+
+    if (validCoupons[couponCode]) {
+        const discount = validCoupons[couponCode];
+        const discountedTotal = subtotal - (subtotal * discount);
+        document.getElementById('cart-total').textContent = `RS. ${discountedTotal.toFixed(2)}`;
+        document.getElementById('cart-subtotal').textContent = `RS. ${discountedTotal.toFixed(2)}`;
+        alert("Coupon applied successfully!");
+    } else {
+        alert("Invalid coupon code");
+    }
+}
+
+// Load cart when the page is loaded
+window.onload = function () {
+    loadCart();
+
+    // Apply coupon event listener
+    document.querySelector('#coupon button').addEventListener('click', applyCoupon);
+};
+</script>
+    
+</body>
+</html>
